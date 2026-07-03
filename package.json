@@ -1,0 +1,30 @@
+{
+  "name": "agent-credit-cap",
+  "version": "0.1.0",
+  "description": "CAP-native working capital agent for autonomous agent commerce.",
+  "type": "module",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "demo": "tsx examples/local-demo.ts",
+    "provider": "tsx src/cap/provider.ts",
+    "requester": "tsx examples/requester-demo.ts"
+  },
+  "dependencies": {
+    "@croo-network/sdk": "^0.2.1",
+    "dotenv": "^17.2.3",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
