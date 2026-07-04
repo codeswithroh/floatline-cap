@@ -29,7 +29,7 @@ Copy `mcp/croo.mcp.example.json` into your MCP host config and replace the key w
 }
 ```
 
-Keep `CROO_SDK_KEY` equal to the local `CROO_API_KEY` used by the provider runtime.
+The provider runtime also accepts `CROO_SDK_KEY`, matching the official Node SDK and MCP server examples.
 
 ## Relevant Tools
 

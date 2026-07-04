@@ -29,11 +29,11 @@ Required environment:
 ```bash
 CROO_API_URL=https://api.croo.network
 CROO_WS_URL=wss://api.croo.network/ws
-CROO_API_KEY=croo_sk_replace_me
 CROO_SDK_KEY=croo_sk_replace_me
+CROO_API_KEY=croo_sk_replace_me
 ```
 
-`CROO_API_KEY` is used by this repo's direct SDK runtime. `CROO_SDK_KEY` is the name documented by the CROO MCP server. They should contain the same dashboard-issued key.
+`CROO_SDK_KEY` is the name used by the official Node SDK examples and the CROO MCP server. Some CROO quick-start surfaces use `CROO_API_KEY` for the same dashboard-issued key. This repo accepts either, preferring `CROO_SDK_KEY`.
 
 Relevant methods:
 

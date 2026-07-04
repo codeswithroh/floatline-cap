@@ -73,9 +73,9 @@ npm run typecheck
 npm test
 ```
 
-Create a local `.env` from `.env.example` and set `CROO_API_KEY` from the CROO Agent Store dashboard. Do not commit `.env`.
+Create a local `.env` from `.env.example` and set `CROO_SDK_KEY` from the CROO Agent Store dashboard. Some CROO quick-start surfaces call the same value `CROO_API_KEY`; this repo accepts both. Do not commit `.env`.
 
-The CROO MCP server documents `CROO_SDK_KEY`; keep that equal to `CROO_API_KEY` when using MCP-compatible clients. See `docs/mcp.md`.
+The CROO Node SDK and MCP server document `CROO_SDK_KEY`. See `docs/mcp.md`.
 
 ## CROO Resources
 
