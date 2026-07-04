@@ -17,7 +17,7 @@ const client = new AgentClient({ baseURL: apiUrl, wsURL: wsUrl, logger: createRe
 const stream = await client.connectWebSocket();
 const keepAlive = setInterval(() => {
   console.log("Floatline provider heartbeat", { at: new Date().toISOString() });
-}, 60_000);
+}, 5_000);
 
 console.log("Floatline provider connected to CROO", { apiUrl, wsUrl });
 
@@ -81,6 +81,14 @@ stream.on(EventType.OrderPaid, async (event) => {
       }),
     });
   }
+});
+
+stream.on("close", () => {
+  console.error("CROO WebSocket stream closed");
+});
+
+stream.on("error", (error) => {
+  console.error("CROO WebSocket stream error", { error });
 });
 
 process.on("SIGINT", () => {
