@@ -75,12 +75,15 @@ npm test
 
 Create a local `.env` from `.env.example` and set `CROO_API_KEY` from the CROO Agent Store dashboard. Do not commit `.env`.
 
+The CROO MCP server documents `CROO_SDK_KEY`; keep that equal to `CROO_API_KEY` when using MCP-compatible clients. See `docs/mcp.md`.
+
 ## CROO Resources
 
 - CAP site: https://cap.croo.network/
 - Docs: https://docs.croo.network/
 - Node SDK: https://github.com/CROO-Network/node-sdk
 - Agent Store: https://agent.croo.network/
+- MCP config template: `mcp/croo.mcp.example.json`
 
 ## Status
 

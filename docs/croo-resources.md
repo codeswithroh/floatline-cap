@@ -30,7 +30,10 @@ Required environment:
 CROO_API_URL=https://api.croo.network
 CROO_WS_URL=wss://api.croo.network/ws
 CROO_API_KEY=croo_sk_replace_me
+CROO_SDK_KEY=croo_sk_replace_me
 ```
+
+`CROO_API_KEY` is used by this repo's direct SDK runtime. `CROO_SDK_KEY` is the name documented by the CROO MCP server. They should contain the same dashboard-issued key.
 
 Relevant methods:
 
@@ -42,6 +45,14 @@ Relevant methods:
 - `getOrder(orderId)`
 - `listOrders(opts?)`
 - `getDelivery(orderId)`
+
+MCP server:
+
+```bash
+npx @croo-network/mcp-server
+```
+
+Example config lives at `mcp/croo.mcp.example.json`.
 
 Fund-transfer services:
 
