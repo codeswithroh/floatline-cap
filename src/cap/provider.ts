@@ -5,6 +5,7 @@ import { CreditQuoteRequestSchema, CreditScoreRequestSchema } from "../credit/sc
 import { quoteCredit } from "../credit/quote.js";
 import { scoreCredit } from "../credit/score.js";
 import type { PublicAgentCreditMetrics } from "../credit/score.js";
+import { parseJsonRequirements } from "./requirements.js";
 
 const apiUrl = process.env.CROO_API_URL ?? "https://api.croo.network";
 const wsUrl = process.env.CROO_WS_URL ?? "wss://api.croo.network/ws";
@@ -138,13 +139,6 @@ async function buildDeliverable(order: Order, requirements: string) {
   }
 
   throw new Error(`Unsupported Floatline service id: ${order.serviceId}`);
-}
-
-function parseJsonRequirements(requirements: string): unknown {
-  const trimmed = requirements.trim();
-  if (!trimmed) return {};
-
-  return JSON.parse(trimmed);
 }
 
 function isScoreService(serviceId: string): boolean {
