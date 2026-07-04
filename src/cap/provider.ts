@@ -1,13 +1,18 @@
 import "dotenv/config";
 import { AgentClient, DeliverableType, EventType } from "@croo-network/sdk";
 import type { Order } from "@croo-network/sdk";
-import { CreditQuoteRequestSchema } from "../credit/schema.js";
+import { CreditQuoteRequestSchema, CreditScoreRequestSchema } from "../credit/schema.js";
 import { quoteCredit } from "../credit/quote.js";
+import { scoreCredit } from "../credit/score.js";
+import type { PublicAgentCreditMetrics } from "../credit/score.js";
 
 const apiUrl = process.env.CROO_API_URL ?? "https://api.croo.network";
 const wsUrl = process.env.CROO_WS_URL ?? "wss://api.croo.network/ws";
 const sdkKey = process.env.CROO_SDK_KEY ?? process.env.CROO_API_KEY;
 const fundAddress = process.env.FLOATLINE_FUND_ADDRESS;
+const scoreServiceId = process.env.CROO_FLOATLINE_SCORE_SERVICE_ID;
+const quoteServiceId = process.env.CROO_FLOATLINE_QUOTE_SERVICE_ID;
+const advanceQuoteServiceId = process.env.CROO_FLOATLINE_ADVANCE_QUOTE_SERVICE_ID;
 
 if (!sdkKey) {
   throw new Error("CROO_SDK_KEY is required");
@@ -55,22 +60,20 @@ stream.on(EventType.OrderPaid, async (event) => {
   try {
     const order = await client.getOrder(event.order_id);
     const requirements = await readRequirements(order);
-    const request = CreditQuoteRequestSchema.parse(JSON.parse(requirements));
-    const quote = quoteCredit(request);
+    const deliverable = await buildDeliverable(order, requirements);
 
     const result = await client.deliverOrder(event.order_id, {
       deliverableType: DeliverableType.Text,
-      deliverableText: JSON.stringify(quote),
+      deliverableText: JSON.stringify(deliverable.body),
     });
 
-    console.log("Delivered quote", {
+    console.log("Delivered Floatline service", {
       orderId: event.order_id,
       txHash: result.txHash,
-      approved: quote.approved,
-      riskScore: quote.riskScore,
+      service: deliverable.service,
     });
   } catch (error) {
-    console.error("Failed to deliver quote", { orderId: event.order_id, error });
+    console.error("Failed to deliver Floatline service", { orderId: event.order_id, error });
 
     await client.deliverOrder(event.order_id, {
       deliverableType: DeliverableType.Text,
@@ -112,6 +115,76 @@ async function readRequirements(order: Order): Promise<string> {
   }
 
   return requirements;
+}
+
+async function buildDeliverable(order: Order, requirements: string) {
+  const parsedRequirements = parseJsonRequirements(requirements);
+
+  if (isScoreService(order.serviceId)) {
+    const request = CreditScoreRequestSchema.parse(parsedRequirements);
+    const publicMetrics = request.agentId ? await fetchPublicAgentCreditMetrics(request.agentId) : undefined;
+    return {
+      service: "floatline.score",
+      body: scoreCredit(request, publicMetrics),
+    };
+  }
+
+  if (isAdvanceQuoteService(order.serviceId)) {
+    const request = CreditQuoteRequestSchema.parse(parsedRequirements);
+    return {
+      service: "floatline.advance.quote",
+      body: quoteCredit(request),
+    };
+  }
+
+  throw new Error(`Unsupported Floatline service id: ${order.serviceId}`);
+}
+
+function parseJsonRequirements(requirements: string): unknown {
+  const trimmed = requirements.trim();
+  if (!trimmed) return {};
+
+  return JSON.parse(trimmed);
+}
+
+function isScoreService(serviceId: string): boolean {
+  return Boolean(scoreServiceId && serviceId === scoreServiceId);
+}
+
+function isAdvanceQuoteService(serviceId: string): boolean {
+  return [quoteServiceId, advanceQuoteServiceId].filter(Boolean).includes(serviceId);
+}
+
+async function fetchPublicAgentCreditMetrics(agentId: string): Promise<PublicAgentCreditMetrics> {
+  const response = await fetch(`${apiUrl}/backend/v1/public/agents/${agentId}`);
+
+  if (!response.ok) {
+    throw new Error(`Unable to fetch CROO public agent metrics: HTTP ${response.status}`);
+  }
+
+  const payload = await response.json() as {
+    agent?: {
+      agentId?: string;
+      walletAddress?: string;
+      completedOrders?: string;
+      totalVolume?: string;
+      completionRate?: number;
+      onlineStatus?: "online" | "offline";
+    };
+  };
+
+  if (!payload.agent?.agentId) {
+    throw new Error("CROO public agent response did not include agent metrics");
+  }
+
+  return {
+    agentId: payload.agent.agentId,
+    walletAddress: payload.agent.walletAddress,
+    completedOrders: Number(payload.agent.completedOrders ?? 0),
+    totalVolumeUsdc: Number(payload.agent.totalVolume ?? 0) / 1_000_000,
+    completionRate: payload.agent.completionRate ?? 0,
+    onlineStatus: payload.agent.onlineStatus ?? "offline",
+  };
 }
 
 function createRedactingLogger() {

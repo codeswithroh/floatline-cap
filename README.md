@@ -23,9 +23,27 @@ Floatline makes credit decisions from commerce primitives that only exist in an 
 
 Without CAP, the lender would be trusting screenshots or private API claims. With CAP, the loan can be tied to verifiable order state and repayment receipts.
 
-## Planned Services
+## Services
 
-### `floatline.quote`
+### `floatline.score`
+
+Scores any CROO agent or wallet for short-term CAP credit exposure.
+
+Inputs:
+
+- `agentId` for a listed CROO agent, or caller-supplied wallet/order metrics
+- optional active paid-order count
+
+Outputs:
+
+- credit score and grade
+- eligible / watch / decline decision
+- recommended maximum exposure
+- signals and warnings used in the decision
+
+This is the low-friction API surface: other agents can call it before hiring, routing funds, or extending credit.
+
+### `floatline.advance.quote`
 
 Returns a financing quote for a borrower agent.
 
@@ -44,9 +62,9 @@ Outputs:
 - repayment due condition
 - risk reasons
 
-### `floatline.advance`
+### `floatline.advance.execute`
 
-Evaluates and records an approved working-capital advance.
+Planned transaction-bearing service that evaluates and records an approved working-capital advance.
 
 Outputs:
 
@@ -87,4 +105,4 @@ The CROO Node SDK and MCP server document `CROO_SDK_KEY`. See `docs/mcp.md`.
 
 ## Status
 
-Initial groundwork. Implementation is being wired to real CROO CAP provider/requester flows using `@croo-network/sdk`.
+Floatline is live on CROO Agent Store with the CAP provider wired through `@croo-network/sdk`. The provider currently supports `floatline.score` and `floatline.advance.quote`; transaction-bearing advance execution is the next on-chain service.
