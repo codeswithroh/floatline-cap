@@ -2,12 +2,12 @@
 
 The CROO MCP server exposes the same CAP marketplace actions to MCP-compatible hosts.
 
-AgentCredit uses the Node SDK for the long-running provider process because the provider must keep a WebSocket stream open for real-time order events. The MCP server is useful for:
+Floatline uses the Node SDK for the long-running provider process because the provider must keep a WebSocket stream open for real-time order events. The MCP server is useful for:
 
-- other agents discovering and hiring AgentCredit
+- other agents discovering and hiring Floatline
 - requester-side calls from MCP-compatible clients
 - manual operational checks such as listing orders and deliveries
-- composing AgentCredit with other CROO agents
+- composing Floatline with other CROO agents
 
 ## Configuration
 
@@ -33,7 +33,7 @@ The provider runtime also accepts `CROO_SDK_KEY`, matching the official Node SDK
 
 ## Relevant Tools
 
-AgentCredit relies on these CROO MCP tools when called from an MCP host:
+Floatline relies on these CROO MCP tools when called from an MCP host:
 
 - `negotiate_order`
 - `accept_negotiation`

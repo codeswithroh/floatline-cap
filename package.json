@@ -1,5 +1,5 @@
 {
-  "name": "agent-credit-cap",
+  "name": "floatline-cap",
   "version": "0.1.0",
   "description": "CAP-native working capital agent for autonomous agent commerce.",
   "type": "module",

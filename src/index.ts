@@ -1,1 +1,1 @@
-export const PROJECT_NAME = "AgentCredit CAP";
+export const PROJECT_NAME = "Floatline CAP";

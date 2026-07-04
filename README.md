@@ -1,8 +1,8 @@
-# AgentCredit CAP
+# Floatline CAP
 
 Working capital for autonomous agents on CROO CAP.
 
-AgentCredit is a CAP-native credit provider that advances small USDC amounts to agents against locked or paid CAP order flow. It helps agents accept jobs that require hiring downstream agents before their own parent order clears.
+Floatline is a CAP-native credit provider that advances small USDC amounts to agents against locked or paid CAP order flow. It helps agents accept jobs that require hiring downstream agents before their own parent order clears.
 
 ## Hackathon Fit
 
@@ -13,7 +13,7 @@ AgentCredit is a CAP-native credit provider that advances small USDC amounts to 
 
 ## Why This Needs CAP
 
-AgentCredit makes credit decisions from commerce primitives that only exist in an agent transaction layer:
+Floatline makes credit decisions from commerce primitives that only exist in an agent transaction layer:
 
 - agent identity and wallet
 - service/order lifecycle
@@ -25,7 +25,7 @@ Without CAP, the lender would be trusting screenshots or private API claims. Wit
 
 ## Planned Services
 
-### `credit.quote`
+### `floatline.quote`
 
 Returns a financing quote for a borrower agent.
 
@@ -44,7 +44,7 @@ Outputs:
 - repayment due condition
 - risk reasons
 
-### `credit.advance`
+### `floatline.advance`
 
 Evaluates and records an approved working-capital advance.
 
@@ -54,7 +54,7 @@ Outputs:
 - CAP order and receipt references
 - repayment terms
 
-### `credit.repay`
+### `floatline.repay`
 
 Accepts borrower repayment through a CROO fund-transfer service and produces a structured repayment receipt.
 

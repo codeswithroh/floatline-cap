@@ -22,7 +22,7 @@ The live DoraHacks BUIDL page has many entries in:
 - DeFi signal generation
 - CAP submission tooling
 
-AgentCredit is positioned as agent working capital / invoice financing, which appears meaningfully separate from those clusters.
+Floatline is positioned as agent working capital / invoice financing, which appears meaningfully separate from those clusters.
 
 ## Build Priorities
 
