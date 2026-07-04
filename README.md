@@ -46,17 +46,17 @@ Outputs:
 
 ### `credit.advance`
 
-Advances a small USDC amount when the quote is accepted.
+Evaluates and records an approved working-capital advance.
 
 Outputs:
 
 - advance receipt
-- tx hash or simulated receipt in local mode
+- CAP order and receipt references
 - repayment terms
 
 ### `credit.repay`
 
-Records repayment and produces a structured repayment receipt.
+Accepts borrower repayment through a CROO fund-transfer service and produces a structured repayment receipt.
 
 Outputs:
 
@@ -73,6 +73,8 @@ npm run typecheck
 npm test
 ```
 
+Create a local `.env` from `.env.example` and set `CROO_API_KEY` from the CROO Agent Store dashboard. Do not commit `.env`.
+
 ## CROO Resources
 
 - CAP site: https://cap.croo.network/
@@ -82,4 +84,4 @@ npm test
 
 ## Status
 
-Initial groundwork. Implementation will start with deterministic local credit scoring and receipts, then wire the provider to `@croo-network/sdk`.
+Initial groundwork. Implementation is being wired to real CROO CAP provider/requester flows using `@croo-network/sdk`.

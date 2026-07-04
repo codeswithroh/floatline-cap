@@ -29,7 +29,7 @@ Required environment:
 ```bash
 CROO_API_URL=https://api.croo.network
 CROO_WS_URL=wss://api.croo.network/ws
-CROO_SDK_KEY=croo_sk_replace_me
+CROO_API_KEY=croo_sk_replace_me
 ```
 
 Relevant methods:
@@ -42,3 +42,10 @@ Relevant methods:
 - `getOrder(orderId)`
 - `listOrders(opts?)`
 - `getDelivery(orderId)`
+
+Fund-transfer services:
+
+- Services can be configured with `require_fund_transfer=true`.
+- Requesters pass `fundAmount` and `fundToken` during negotiation.
+- Providers accept with `acceptNegotiationWithFundAddress(negotiationId, providerFundAddress)`.
+- The pay transaction transfers `fundAmount` of `fundToken` to `providerFundAddress`.

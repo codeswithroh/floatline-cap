@@ -5,10 +5,11 @@ import { quoteCredit } from "../credit/quote.js";
 
 const apiUrl = process.env.CROO_API_URL ?? "https://api.croo.network";
 const wsUrl = process.env.CROO_WS_URL ?? "wss://api.croo.network/ws";
-const sdkKey = process.env.CROO_SDK_KEY;
+const sdkKey = process.env.CROO_API_KEY ?? process.env.CROO_SDK_KEY;
+const fundAddress = process.env.AGENTCREDIT_FUND_ADDRESS;
 
 if (!sdkKey) {
-  throw new Error("CROO_SDK_KEY is required");
+  throw new Error("CROO_API_KEY is required");
 }
 
 const client = new AgentClient({ baseURL: apiUrl, wsURL: wsUrl }, sdkKey);
@@ -16,6 +17,19 @@ const stream = await client.connectWebSocket();
 
 stream.on(EventType.NegotiationCreated, async (event) => {
   if (!event.negotiation_id) return;
+
+  const negotiation = await client.getNegotiation(event.negotiation_id);
+
+  if (negotiation.fundAmount && negotiation.fundToken) {
+    if (!fundAddress) {
+      await client.rejectNegotiation(event.negotiation_id, "AGENTCREDIT_FUND_ADDRESS is required for fund-transfer services");
+      return;
+    }
+
+    await client.acceptNegotiationWithFundAddress(event.negotiation_id, fundAddress);
+    return;
+  }
+
   await client.acceptNegotiation(event.negotiation_id);
 });
 
